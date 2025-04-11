@@ -1,6 +1,6 @@
 # Steam Dynamic Compatdata Bind Mount using pam_namespace
 
-This project provides configuration and a script (`steamlibrary.init`) for `pam_namespace.so` to automatically manage Steam's `compatdata` directories, addressing critical issues on **multi-user Linux systems utilizing shared Steam library folders**.
+This project provides configuration and a script (`steamlibrary.init`) for `pam_namespace.so` to automatically manage Steam's `compatdata` directories, addressing issues on **multi-user Linux systems utilizing shared Steam library folders**.
 
 *(Tested on Debian 13 (Trixie/Testing). May require adjustments for other distributions.)*
 
@@ -8,7 +8,7 @@ This project provides configuration and a script (`steamlibrary.init`) for `pam_
 
 On Linux systems where multiple users share a common Steam library folder (e.g., on a separate drive), two main problems arise with Steam Play / Proton `compatdata` directories:
 
-1.  **Shared `compatdata` Directory & Conflicts:** Steam places the `compatdata` folder (containing Proton prefixes) *inside the shared library's* `steamapps` directory. When different users run games from this shared library, they all attempt to use the **exact same** prefix directories, leading to conflicts, corrupted prefixes, and overwritten settings/saves.
+1.  **Shared `compatdata` Directory & Conflicts:** Steam places the `compatdata` folder (containing Proton prefixes) *inside the shared library's* `steamapps` directory. When different users run games from this shared library, they all attempt to use the **exact same** prefix directories, leading to conflicts and overwritten settings/saves.
 2.  **Incorrect File Ownership:** As multiple users interact with the *same* files in the shared `compatdata` location, file ownership often becomes incorrect for the current user. Proton may then encounter permission errors, causing games to fail to launch.
 
 *(**Note on NTFS:** While this solution focuses on typical Linux filesystems, it *might* help with ownership issues on shared NTFS partitions, but this specific use case is untested.)*
