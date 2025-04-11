@@ -47,17 +47,15 @@ fi
 log debug "Parsing VDF file '$VDF_FILE' for user '$user'."
 declare -a VALID_TARGET_POLYDIRS=() # Array to hold final target mount points
 # Process library base paths
-runuser -u "$user" -- bash -c "grep '\"path\"' '$VDF_FILE' 2>/dev/null" |
-    cut -d'"' -f4 | grep -v "^${homedir}" |
-    while IFS="" read -r lib_path || [ -n "$lib_path" ]; do
-        if [[ "$lib_path" != /* ]]; then
-            log warn "Skipping non-absolute library path: '$lib_path'"
-            continue
-        fi
-        full_target_path="${lib_path}/steamapps/compatdata"
-        log debug "Found valid external target path: '$full_target_path'"
-        VALID_TARGET_POLYDIRS+=("$full_target_path")
-    done
+while IFS="" read -r lib_path || [ -n "$lib_path" ]; do
+    if [[ "$lib_path" != /* ]]; then
+        log warn "Skipping non-absolute library path: '$lib_path'"
+        continue
+    fi
+    full_target_path="${lib_path}/steamapps/compatdata"
+    log debug "Found valid external target path: '$full_target_path'"
+    VALID_TARGET_POLYDIRS+=("$full_target_path")
+done < <(runuser -u "$user" -- bash -c "grep '\"path\"' '$VDF_FILE' 2>/dev/null" | cut -d'"' -f4 | grep -v "^${homedir}")
 
 if [ ${#VALID_TARGET_POLYDIRS[@]} -eq 0 ]; then
     log info "No external (non-HOME) library paths found in VDF for user '$user'."
@@ -74,16 +72,16 @@ for target_path in "${VALID_TARGET_POLYDIRS[@]}"; do
     # Check if target mount point directory exists before attempting mount
     if ! [ -d "$target_path" ]; then
         log warn " Target '$target_path' does not exist. Skipping mount."
-        ((mount_fail_count++))
+        ((mount_fail_count++, 1))
         continue
     fi
     # Use direct command success/failure check in 'if'
     if mount --bind "$USER_SOURCE_DIR" "$target_path"; then
         log info "Mounted -> '$target_path'"
-        ((mount_success_count++))
+        ((mount_success_count++, 1))
     else
         log err " FAILED to mount -> '$target_path' (Code: $?)"
-        ((mount_fail_count++))
+        ((mount_fail_count++, 1))
     fi
 done
 log info "Mounting finished for '$user'. Success: $mount_success_count, Failed/Skipped: $mount_fail_count."
