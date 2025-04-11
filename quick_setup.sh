@@ -5,8 +5,8 @@
 set -e # Exit on first error
 
 # --- Configuration ---
-CONF_URL="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/steamlibrary.conf"
-INIT_SCRIPT_URL="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/steamlibrary.init"
+CONF_URL="https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.conf"
+INIT_SCRIPT_URL="https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.init"
 
 NAMESPACE_D_DIR="/etc/security/namespace.d"
 CONF_TARGET="$NAMESPACE_D_DIR/99-steamlibrary.conf"

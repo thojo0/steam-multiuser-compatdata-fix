@@ -39,28 +39,28 @@ You can use the Quick Setup script or follow the manual steps.
 
 **A. Quick Setup Script (Recommended)**
 
-1.  **Download the setup script:** Replace `YOUR_REPO_URL` with the actual raw URL to `quick_setup.sh` in your repository.
+1.  **Download the setup script:**
     ```bash
-    wget -O quick_setup.sh YOUR_REPO_URL/quick_setup.sh
+    wget -O quick_setup.sh "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/quick_setup.sh"
     chmod +x quick_setup.sh
     ```
 2.  **Review the script:** Check the commands in `quick_setup.sh` to ensure they are appropriate for your system.
 3.  **Run the script:**
     ```bash
-    sudo bash ./quick_setup.sh
+    sudo bash quick_setup.sh
     ```
 4.  **Reboot or Relogin:** Log out completely and log back in for the changes to take effect.
 
 **B. Manual Installation**
 
-1.  **Download Configuration:** Replace `YOUR_CONF_URL` with the raw URL to `steamlibrary.conf`.
+1.  **Download Configuration:**
     ```bash
-    sudo wget -O /etc/security/namespace.d/99-steamlibrary.conf YOUR_CONF_URL/steamlibrary.conf
+    sudo wget -O /etc/security/namespace.d/99-steamlibrary.conf "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.conf"
     ```
 
-2.  **Download Script:** Replace `YOUR_INIT_URL` with the raw URL to `steamlibrary.init`.
+2.  **Download Script:**
     ```bash
-    sudo wget -O /etc/security/namespace.d/99-steamlibrary.init YOUR_INIT_URL/steamlibrary.init
+    sudo wget -O /etc/security/namespace.d/99-steamlibrary.init "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.init"
     ```
 
 3.  **Make Script Executable:**
@@ -78,8 +78,7 @@ You can use the Quick Setup script or follow the manual steps.
     Append the `pam_namespace.so` line to your PAM session configuration. I highly recommend trying `optional` first. If the mounts don't appear after relogin (check logs), change `optional` to `required`. Prioritized files for Debian-based systems are `/etc/pam.d/common-session` and `/etc/pam.d/common-session-noninteractive`.
 
     ```bash
-    echo "session    optional    pam_namespace.so" | sudo tee -a "/etc/pam.d/common-session"
-    echo "session    optional    pam_namespace.so" | sudo tee -a "/etc/pam.d/common-session-noninteractive"
+    echo "session    optional    pam_namespace.so" | sudo tee -a "/etc/pam.d/common-session" "/etc/pam.d/common-session-noninteractive"
     ```
     **Critical Warning:** Incorrectly editing PAM files can prevent users (including yourself!) from logging in. Proceed with caution and ensure you have recovery access (e.g., a root password to sign in through console).
 
