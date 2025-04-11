@@ -41,7 +41,7 @@ You can use the Quick Setup script or follow the manual steps.
 
 1.  **Download the setup script:**
     ```bash
-    wget -O quick_setup.sh "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/quick_setup.sh"
+    wget -q --show-progress -O quick_setup.sh "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/quick_setup.sh"
     chmod +x quick_setup.sh
     ```
 2.  **Review the script:** Check the commands in `quick_setup.sh` to ensure they are appropriate for your system.
@@ -59,12 +59,12 @@ You can use the Quick Setup script or follow the manual steps.
 
 1.  **Download Configuration:**
     ```bash
-    sudo wget -O /etc/security/namespace.d/99-steamlibrary.conf "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.conf"
+    sudo wget -q --show-progress -O /etc/security/namespace.d/99-steamlibrary.conf "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.conf"
     ```
 
 2.  **Download Script:**
     ```bash
-    sudo wget -O /etc/security/namespace.d/99-steamlibrary.init "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.init"
+    sudo wget -q --show-progress -O /etc/security/namespace.d/99-steamlibrary.init "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.init"
     ```
 
 3.  **Make Script Executable:**

@@ -24,10 +24,10 @@ mkdir -p "$TRIGGER_DIR"
 chmod 755 "$TRIGGER_DIR"
 
 echo "[2/4] Setup steamlibrary.conf..."
-wget -O "$CONF_TARGET" "$CONF_URL"
+wget -q --show-progress -O "$CONF_TARGET" "$CONF_URL"
 
 echo "[3/4] Setup steamlibrary.init..."
-wget -O "$INIT_SCRIPT_TARGET" "$INIT_SCRIPT_URL"
+wget -q --show-progress -O "$INIT_SCRIPT_TARGET" "$INIT_SCRIPT_URL"
 chmod 755 "$INIT_SCRIPT_TARGET"
 
 echo "[4/4] Appending PAM configuration (using 'optional')..."
