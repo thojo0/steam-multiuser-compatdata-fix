@@ -50,6 +50,10 @@ You can use the Quick Setup script or follow the manual steps.
     sudo bash quick_setup.sh
     ```
 4.  **Reboot or Relogin:** Log out completely and log back in for the changes to take effect.
+5.  **(Optional) Remove the script:**
+    ```bash
+    rm quick_setup.sh
+    ```
 
 **B. Manual Installation**
 
