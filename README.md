@@ -33,6 +33,10 @@ This **redirects** all `compatdata` access in shared libraries to the user's **p
 * `wget` installed (for quick setup).
 * Root privileges for setup.
 
+## Disclaimer
+
+This script modifies system configuration (PAM) and executes with root privileges during the sensitive login process. Incorrect setup or script errors could impact system stability or user login capabilities. **Use this script at your own risk.** Test thoroughly in your environment. Maintain recovery access to your system in case of issues. This solution is primarily intended for shared libraries on standard Linux filesystems; its effectiveness on NTFS is speculative and untested.
+
 ## Installation
 
 You can use the Quick Setup script or follow the manual steps.
@@ -123,7 +127,3 @@ After installation and full logout/login:
     sudo chmod 000 /shared/steamlib/steamapps/compatdata
     ```
     If the `pam_namespace` script fails, Steam will try to write here and get a "Permission denied" error, making the problem obvious. If the script *succeeds*, this directory is hidden by the bind mount, and games work normally.
-
-## Disclaimer
-
-This script modifies system configuration (PAM) and executes with root privileges during the sensitive login process. Incorrect setup or script errors could impact system stability or user login capabilities. **Use this script at your own risk.** Test thoroughly in your environment. Maintain recovery access to your system in case of issues. This solution is primarily intended for shared libraries on standard Linux filesystems; its effectiveness on NTFS is speculative and untested.
