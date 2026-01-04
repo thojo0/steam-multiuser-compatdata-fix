@@ -76,7 +76,7 @@ for target_path in "${VALID_TARGET_POLYDIRS[@]}"; do
         continue
     fi
     # Use direct command success/failure check in 'if'
-    if mount --bind "$USER_SOURCE_DIR" "$target_path"; then
+    if mount --bind -o x-gvfs-hide "$USER_SOURCE_DIR" "$target_path"; then
         log info "Mounted -> '$target_path'"
         ((mount_success_count++, 1))
     else
