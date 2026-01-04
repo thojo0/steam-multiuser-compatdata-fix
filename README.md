@@ -40,51 +40,51 @@ You can use the Quick Setup script or follow the manual steps.
 **A. Quick Setup Script (Recommended)**
 
 1.  **Download the setup script:**
-    ```bash
+    ```bash
     wget -q --show-progress -O quick_setup.sh "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/quick_setup.sh"
-    chmod +x quick_setup.sh
-    ```
-2.  **Review the script:** Check the commands in `quick_setup.sh` to ensure they are appropriate for your system.
-3.  **Run the script:**
-    ```bash
-    sudo bash quick_setup.sh
-    ```
-4.  **Reboot or Relogin:** Log out completely and log back in for the changes to take effect.
-5.  **(Optional) Remove the script:**
-    ```bash
-    rm quick_setup.sh
-    ```
+    chmod +x quick_setup.sh
+    ```
+3.  **Review the script:** Check the commands in `quick_setup.sh` to ensure they are appropriate for your system.
+4.  **Run the script:**
+    ```bash
+    sudo bash quick_setup.sh
+    ```
+5.  **Reboot or Relogin:** Log out completely and log back in for the changes to take effect.
+6.  **(Optional) Remove the script:**
+    ```bash
+    rm quick_setup.sh
+    ```
 
 **B. Manual Installation**
 
 1.  **Download Configuration:**
-    ```bash
+    ```bash
     sudo wget -q --show-progress -O /etc/security/namespace.d/99-steamlibrary.conf "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.conf"
-    ```
+    ```
 
 2.  **Download Script:**
-    ```bash
+    ```bash
     sudo wget -q --show-progress -O /etc/security/namespace.d/99-steamlibrary.init "https://raw.githubusercontent.com/thojo0/steam-multiuser-compatdata-fix/main/steamlibrary.init"
-    ```
+    ```
 
 3.  **Make Script Executable:**
-    ```bash
-    sudo chmod 755 /etc/security/namespace.d/99-steamlibrary.init
-    ```
+    ```bash
+    sudo chmod 755 /etc/security/namespace.d/99-steamlibrary.init
+    ```
 
 4.  **Create Trigger Directory:**
-    ```bash
-    sudo mkdir -p /opt/pam_namespace_steamlibrarytrigger
-    sudo chmod 755 /opt/pam_namespace_steamlibrarytrigger
-    ```
+    ```bash
+    sudo mkdir -p /opt/pam_namespace_steamlibrarytrigger
+    sudo chmod 755 /opt/pam_namespace_steamlibrarytrigger
+    ```
 
 5.  **Configure PAM:**
-    Append the `pam_namespace.so` line to your PAM session configuration. I highly recommend trying `optional` first. If the mounts don't appear after relogin (check logs), change `optional` to `required`. Prioritized files for Debian-based systems are `/etc/pam.d/common-session` and `/etc/pam.d/common-session-noninteractive`.
+    Append the `pam_namespace.so` line to your PAM session configuration. I highly recommend trying `optional` first. If the mounts don't appear after relogin (check logs), change `optional` to `required`. Prioritized files for Debian-based systems are `/etc/pam.d/common-session` and `/etc/pam.d/common-session-noninteractive`.
 
-    ```bash
+    ```bash
     echo "session    optional    pam_namespace.so" | sudo tee -a "/etc/pam.d/common-session" "/etc/pam.d/common-session-noninteractive"
-    ```
-    **Critical Warning:** Incorrectly editing PAM files can prevent users (including yourself!) from logging in. Proceed with caution and ensure you have recovery access (e.g., a root password to sign in through console).
+    ```
+    **Critical Warning:** Incorrectly editing PAM files can prevent users (including yourself!) from logging in. Proceed with caution and ensure you have recovery access (e.g., a root password to sign in through console).
 
 6.  **Reboot or Relogin:** Log out completely and log back in.
 
@@ -93,26 +93,26 @@ You can use the Quick Setup script or follow the manual steps.
 After installation and full logout/login:
 
 1.  **Check Mounts (within session):** In a user terminal:
-    ```bash
-    mount | grep compatdata
-    ```
-    Confirm lines show bind mounts from `~/.steam/steam/steamapps/compatdata` onto your shared library paths (e.g., `/shared/steamlib/steamapps/compatdata`).
+    ```bash
+    mount | grep compatdata
+    ```
+    Confirm lines show bind mounts from `~/.steam/steam/steamapps/compatdata` onto your shared library paths (e.g., `/shared/steamlib/steamapps/compatdata`).
 2.  **Check Directory Content:** Compare contents:
-    ```bash
-    ls /path/to/shared/library/steamapps/compatdata
-    ls ~/.steam/steam/steamapps/compatdata
-    # Output should be identical.
-    ```
+    ```bash
+    ls /path/to/shared/library/steamapps/compatdata
+    ls ~/.steam/steam/steamapps/compatdata
+    # Output should be identical.
+    ```
 3.  **Multi-User Test:** Log in as a *different* user who also uses the shared library. Launch a Proton game from the shared library. Verify it functions correctly and uses prefixes within *their own* home directory (`/home/otheruser/.steam/...`), not the first user's home or the shared path itself.
 
 ## Troubleshooting
 
 * **Check System Logs:** View script logs using its tag:
-    ```bash
-    sudo journalctl -t steamlibrary.init
-    # Or check general logs like /var/log/syslog, /var/log/auth.log
-    ```
-    Look for errors related to user/home detection, VDF parsing, directory checks, or mount commands.
+    ```bash
+    sudo journalctl -t steamlibrary.init
+    # Or check general logs like /var/log/syslog, /var/log/auth.log
+    ```
+    Look for errors related to user/home detection, VDF parsing, directory checks, or mount commands.
 * **File/Directory Permissions:** Ensure `/etc/security/namespace.d/99-steamlibrary.init` is `755`. Ensure `/opt/pam_namespace_steamlibrarytrigger` exists.
 * **PAM Stack:** Double-check `pam_namespace.so` is in the correct PAM file(s) for your login method(s).
 * **Paths:** Ensure `DUMMY_POLYDIR` in the script matches the `polydir` in `/etc/security/namespace.d/99-steamlibrary.conf`. Verify the user's VDF file (`~/.steam/steam/steamapps/libraryfolders.vdf`) exists and is readable by them.
