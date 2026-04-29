@@ -83,7 +83,7 @@ You can use the Quick Setup script or follow the manual steps.
     ```
 
 5.  **Configure PAM:**
-    Append the `pam_namespace.so` line to your PAM session configuration. I highly recommend trying `optional` first. If the mounts don't appear after relogin (check logs), change `optional` to `required`. Prioritized files for Debian-based systems are `/etc/pam.d/common-session` and `/etc/pam.d/common-session-noninteractive`.
+    Append the `pam_namespace.so` line to your PAM session configuration. I highly recommend trying `optional` first. If the mounts don't appear after relogin (check logs), change `optional` to `required`. Prioritized files for Debian-based systems are `/etc/pam.d/common-session` and `/etc/pam.d/common-session-noninteractive`. For Arch-based systems, the common login configuration file is `/etc/pam.d/system-login`.
 
     ```bash
     echo "session    optional    pam_namespace.so" | sudo tee -a "/etc/pam.d/common-session" "/etc/pam.d/common-session-noninteractive"

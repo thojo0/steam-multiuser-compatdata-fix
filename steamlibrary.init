@@ -28,11 +28,14 @@ if [ -z "$homedir" ] || ! [ -d "$homedir" ]; then
     exit 1
 fi
 
+readonly uid=$(id -u "$user")
+readonly gid=$(id -g "$user")
+
 log info "Processing trigger '$1' for user '$user' with home '$homedir'."
 
 # === Discover and Filter Steam Library Paths ===
 readonly VDF_FILE="${homedir}/.steam/steam/steamapps/libraryfolders.vdf"
-if ! runuser -u "$user" -- test -f "$VDF_FILE"; then
+if ! setpriv --reuid="$uid" --regid="$gid" --init-groups -- test -f "$VDF_FILE"; then
     log info "VDF file '$VDF_FILE' not found for user '$user'. No external libraries to process."
     exit 0
 fi
@@ -55,7 +58,7 @@ while IFS="" read -r lib_path || [ -n "$lib_path" ]; do
     full_target_path="${lib_path}/steamapps/compatdata"
     log debug "Found valid external target path: '$full_target_path'"
     VALID_TARGET_POLYDIRS+=("$full_target_path")
-done < <(runuser -u "$user" -- bash -c "grep '\"path\"' '$VDF_FILE' 2>/dev/null" | cut -d'"' -f4 | grep -v "^${homedir}")
+done < <(setpriv --reuid="$uid" --regid="$gid" --init-groups -- bash -c "grep '\"path\"' '$VDF_FILE' 2>/dev/null" | cut -d'"' -f4 | grep -v "^${homedir}")
 
 if [ ${#VALID_TARGET_POLYDIRS[@]} -eq 0 ]; then
     log info "No external (non-HOME) library paths found in VDF for user '$user'."
